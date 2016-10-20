@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+
+.nota {
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	}
+
+#do{
+	background-color:yellow;
+	float:left;
+	}
+
+#re{
+	background-color:blue;
+	float:left;
+	}
+
+#mi{
+	background-color:red;
+	float:left;
+	}
+
+#fa{
+	background-color:green;
+	float:left;
+	}
+
+#sol{
+	background-color:pink;
+	float:left;
+	}
+
+#la{
+	background-color:orange;
+	float:left;
+	}
+
+#si{
+	background-color:grey;
+	float:left;
+	}	
+
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script> 
+$(document).ready(function(){
+    $(".nota").mouseenter(function(){
+			$(this).css({opacity: '0.4', width: '125px', height: '125px' 
+			});
+			var notasPulsadas = $(this).text();
+			$("#pulsadas").append(notasPulsadas, " ");
+	});
+	$(".nota").mouseleave (function(){
+			$(this).css({opacity: '1', width: '100px', height: '100px' 
+		});
+    });
+	$("#limpiar").click(function(){
+        $("#pulsadas").empty();
+		$("#pulsadas").append("Notas Pulsadas: ");
+    });
+	
+	$("#agregarQuitar").click(function(){
+        var teclas = $("select").val();
+		$(".nota").eq(teclas).toggle();
+    });
+	$(".clasico").click(function(){
+        $("div.nota:even").css({"background-color": "black", "color": "white"});
+		$("div.nota:odd").css("background-color", "white");
+    });
+	
+	$("#guardar").click(function(){
+        $("#piano").slideToggle("slow");
+    });
+});
+</script> 
+
+</head>
+<body>
+<div id="piano">	
+<div id="do" class="nota">DO</div>
+<div id="re" class="nota">RE</div>
+<div id="mi" class="nota">MI</div>
+<div id="fa" class="nota">FA</div>
+<div id="sol" class="nota">SOL</div>
+<div id="la" class="nota">LA</div>
+<div id="si" class="nota">SI</div>
+<br><br><br><br><br><br><br><br>
+<div id="pulsadas">Notas Pulsadas: </div>
+<br><br>
+<button id="limpiar">Limpiar Notas </button>
+<button id="agregarQuitar">Agregar/Quitar Teclas</button>
+<select>
+	<option value="0">DO</option>
+	<option value="1">RE</option>
+	<option value="2">MI</option>
+	<option value="3">FA</option>
+	<option value="4">SOL</option>
+	<option value="5">LA</option>
+	<option value="6">Si</option>	
+</select>
+<button class="clasico">Piano Clasico</button>
+<button id="guitarra">Guitarra</button>
+</div><br><br>
+<button id="guardar">Guardar/Sacar Instrumento</button>
+
+<div id="ver"> </div>
+</body>		
+</html>

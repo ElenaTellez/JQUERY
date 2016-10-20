@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css"></style>
+
+<script src="jquery-3.1.1.slim.min.js"></script>
+<script>
+	
+$(document).ready(function(){
+	//ejercicio 1
+	$("#ejercicio1").click(function() {
+        //Para el elemento que tenga id=myformulario
+        //busca sus campos input que tenga
+        //como propiedad name='nombre'
+        //le cambiamos su css de fondo a verde
+		$("#myformulario :input[name='nombre']").css("background-color","green");
+    
+	});
+	//ejercicio2
+	$("#ejercicio2").click(function(){
+		$("#menu ol.listamenu").hide(1000);
+	});
+	
+	//ejercicio 3
+	$("#ejercicio3").click(function(e) {
+		$("#pie :contains('Done by')").css("text-decoration","none");
+	});
+	
+	//ejercicio 4
+	$("#misdatos :checkbox").hide(); // al entrar ya esta oculto por esta funcion
+		
+	$("#ejercicio4").click(function(){		
+		$("#misdatos :checkbox").show();
+	});
+	
+	//ejercicio 5
+	$("#ejercicio5").click(function() {
+		var contenido = $("#alumno_3").attr("href");
+		$("#enlace").attr("href", contenido);
+	});
+
+
+});
+</script>
+
+</head>
+<body>
+<p>
+	1. Al campo de entrada con name=”nombre” del formulario con ID “myformulario” cambiar su color de fondo a verde:
+</p>	
+<form id="myformulario">
+Nombre: <input type="text" name="nombre" >
+</form>
+<button id="ejercicio1">Ejercicio 1</button>
+
+<p>
+2. Para todos los elementos de las listas ordenadas con la clase “listamenu” dentro de la capa con id “menu” ocultarlas.	
+</p>
+
+<div id="menu">
+<ol class="listamenu">
+	<li>uno</li>
+    <li>dos</li>
+    <li>tres</li>
+</ol>
+<ol>
+	<li>uno</li>
+    <li>dos</li>
+    <li>tres</li>
+</ol>
+<ul class="listamenu">
+	<li>uno</li>
+    <li>dos</li>
+    <li>tres</li>
+</ul>
+<ol class="listamenu">
+	<li>uno</li>
+    <li>dos</li>
+    <li>tres</li>
+</ol>
+<button id="ejercicio2">Ejercicio 2</button>
+</div>
+
+<p>
+3. Para aquellos elementos de la capa con id “pie” que contengan el texto “Done by” quitar el subrayado “underline”.
+</p>
+
+<div id="pie">
+	<p style="text-decoration:underline">Done by: esto tambien pierde el subrayado</p>
+	<a href="#">Done by: esto tambien pierde el subrayado</a>
+	<br>
+<button id="ejercicio3">Ejercicio 3</button>
+
+</div>
+
+<p>
+4 Al hacer click en el boton con id:”hobby” Mostrar todos los elementos checkbox del formulario con id “misdatos”.
+</p>
+
+<form id="misdatos">
+Opcion 1: <input type="checkbox" name="opcion1">
+Opcion 2: <input type="checkbox" name="opcion2" >
+Opcion 3: <input type="checkbox" name="opcion3" >
+</form>
+<input type="button" id="ejercicio4" value="Hobby">
+
+<p>
+5. Poner el contenido del href del enlace con id=”alumno_3” en una capa denominada con id “enlace” 
+</p>
+
+<a id=”alumno_3” href=”http://www.iescampanillas.es”>Alumno 3</a>
+<div id=”enlace”></div>
+<input type="button" id="ejercicio5" value="Ejercicio5">
+
+</body>		
+</html>
