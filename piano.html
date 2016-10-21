@@ -66,13 +66,21 @@ $(document).ready(function(){
     });
 	
 	$("#agregarQuitar").click(function(){
-        var teclas = $("select").val();
-		$(".nota").eq(teclas).toggle();
+        var teclas = $("select").val();//recogo el valor de select 1,2,3,...
+		$(".nota").eq(teclas).toggle();//con eq quito la tecla en esta posicion
     });
-	$(".clasico").click(function(){
+    
+	$(".clasico").click(function(){ //distingo con even y odd entre pares e impares
         $("div.nota:even").css({"background-color": "black", "color": "white"});
 		$("div.nota:odd").css("background-color", "white");
     });
+    
+    $("#guitarra").click(function(){
+		$("#piano div:visible").each(function(i){//i no hay que declararlo es automatico
+			var alto = 100+(25*i);
+			$(this).animate({width:'100px', height:alto+'px'},"fast");
+			});
+	});
 	
 	$("#guardar").click(function(){
         $("#piano").slideToggle("slow");
