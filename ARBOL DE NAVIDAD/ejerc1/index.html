@@ -6,17 +6,78 @@
 	<link rel="stylesheet" type="text/css" href="css/estilo.css">
 	<script src="js/jquery-2.1.4.min.js"></script>		
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="js/arbol.js"></script>
+	<script src="js/jquery.jrumble.1.3.js"></script>
 	<script>
-	$(document).ready(function(){
-		$("#adornar").click(function(){
-			$input.disabled = true;
-		});
 	
+	
+	$(document).ready(function(){	
+	var creadas = 0;
+	var caidas = 0;
+	$("#arbol").jrumble({x: 4,y: 0,rotation: 0}); //con esta funcion dare el temblor al arbol
+	$( "#mover" ).prop( "disabled", false);
+	
+	
+		
+		$("#adornar").click(function(){
+			var adorno = $("<div></div>").addClass("bolita");
+			
+			//creo color de forma aleatoria
+			function getRand(min, max) { //esta funcion ayuda a crear la posicion de forma aleatoria
+				return Math.random() * (max - min) + min;
+			}
+			var newColor = "rgb(" + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + "," + Math.floor(Math.random() * 255) + ")";
+			adorno.css({"background-color": newColor, "left": getRand(0,300)});
+			
+			var posTop = parseInt(Math.random() * 300);
+			var maximoMinimoLeft = parseInt(posTop / 2.5);
+
+			/* Fórmulas para calcular la posición left del adorno */
+			var posLeftMaxima = parseInt((maximoMinimoLeft + 295) - 100);
+			var posLeftMinima =  -((maximoMinimoLeft + 295) - 485);
+		
+			var posLeft = (Math.random() * (posLeftMaxima - posLeftMinima)) + posLeftMinima;
+			
+			$(adorno).css("top", "0px"); //comienzo de caida de bola en pixel 0
+			$(adorno).css("left", posLeft); //left aleatorio dentro de arbol 
+			
+			$(adorno).animate({top: posTop}, "low");//movimiento de caida con final aleatorio
+			
+			$("#juego").append(adorno);
+			
+			creadas++;
+			$("#creadas").empty();
+			$("#creadas").append(creadas);
+			
+			var deshabilitar = function() {
+				$( "#mover" ).prop( "disabled", true);
+			};
+			var callbacks = $.Callbacks();
+			callbacks.add( deshabilitar);
+				
+		});
+		
+		$("#mover").bind({
+			"mousedown": function(){
+			$("#arbol").trigger('startRumble');
+			var bolasCaen = $(".bolita");
+			bolasCaen.each(function(){
+			$(this).animate({top: "340px"}, "low");
+			$(this).animate({opacity: "0"}, "low");
+			});
+			},
+			"mouseup": function(){
+			$("#arbol").trigger('stopRumble');
+			
+			caidas = creadas + caidas;
+			$("#creadas").empty();
+			$("#creadas").append("0");
+			$("#eliminadas").empty();
+			$("#eliminadas").append(caidas);
+			creadas =0;
+			}
+		});
 	});
 	</script>
-	
-    
 </head>
     
 <body>
