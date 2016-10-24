@@ -14,11 +14,10 @@
 	var creadas = 0;
 	var caidas = 0;
 	$("#arbol").jrumble({x: 4,y: 0,rotation: 0}); //con esta funcion dare el temblor al arbol
-	$( "#mover" ).prop( "disabled", false);
-	
-	
 		
 		$("#adornar").click(function(){
+			$("#mover").attr("disabled",true);
+			
 			var adorno = $("<div></div>").addClass("bolita");
 			
 			//creo color de forma aleatoria
@@ -40,40 +39,41 @@
 			$(adorno).css("top", "0px"); //comienzo de caida de bola en pixel 0
 			$(adorno).css("left", posLeft); //left aleatorio dentro de arbol 
 			
-			$(adorno).animate({top: posTop}, "low");//movimiento de caida con final aleatorio
+			$(adorno).animate({top: posTop}, "low", function (){
+				$("#mover").removeAttr("disabled"); //deshabilito con callback
+				});//movimiento de caida con final aleatorio
 			
 			$("#juego").append(adorno);
-			
 			creadas++;
 			$("#creadas").empty();
 			$("#creadas").append(creadas);
-			
-			var deshabilitar = function() {
-				$( "#mover" ).prop( "disabled", true);
-			};
-			var callbacks = $.Callbacks();
-			callbacks.add( deshabilitar);
-				
 		});
 		
 		$("#mover").bind({
 			"mousedown": function(){
 			$("#arbol").trigger('startRumble');
+			
 			var bolasCaen = $(".bolita");
+			
 			bolasCaen.each(function(){
-			$(this).animate({top: "340px"}, "low");
-			$(this).animate({opacity: "0"}, "low");
-			});
+				$(this).animate({top: "340px"}, "low");
+				$(this).animate({opacity: "0"}, "low",function (){
+						$(this).remove();
+				});  //borro con un callback para que se borre cuando cae
+				$("#adornar").attr("disabled",true);
+				});
 			},
+			
 			"mouseup": function(){
-			$("#arbol").trigger('stopRumble');
+				$("#arbol").trigger('stopRumble');
 			
 			caidas = creadas + caidas;
 			$("#creadas").empty();
 			$("#creadas").append("0");
 			$("#eliminadas").empty();
 			$("#eliminadas").append(caidas);
-			creadas =0;
+			creadas=0;
+			$("#adornar").attr("disabled",false);
 			}
 		});
 	});
