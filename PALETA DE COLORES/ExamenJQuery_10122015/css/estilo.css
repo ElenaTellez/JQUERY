@@ -1,0 +1,65 @@
+#contenedor {
+	width:600px;
+	height:400px;
+	border:1px solid #000;
+	margin:auto;
+}
+
+#contenedor div {
+	width:98px;
+	height:98px;
+	border:1px solid #000;
+	float:left;
+}
+
+#paletas {
+	width:600px;
+	margin:auto;
+}
+
+#paletaUno, #paletaDos {
+	height:150px;
+	width:600px;
+	margin-top:20px;
+}
+#paletaUno h3, #paletaDos h3 {
+	margin:0;
+}
+#paletaUno div, #paletaDos div {
+	width:98px;
+	height:98px;
+	border:1px solid #000;
+	float:left;
+	cursor:pointer;
+	color:#FFF;
+	font-weight:bold;
+}
+
+.nada {
+	background-color:#FFFFFF;
+	color:#FFFFFF;
+}
+.rojo {
+	background-color:#FF6666;
+	color:#FF6666;
+}
+.amariyo {
+	background-color:#FFFF99;
+	color:#FFFF99;
+}
+.verde {
+	background-color:#9F6;
+	color:#9F6;
+}
+.azul {
+	background-color:#0099FF;
+	color:#0099FF;
+}
+.negro {
+	background-color:#666666;
+	color:#666666;
+}
+.blanco {
+	background-color:#CCCCCC;
+	color:#CCCCCC;
+}

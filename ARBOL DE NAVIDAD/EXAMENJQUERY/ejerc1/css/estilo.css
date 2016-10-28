@@ -1,0 +1,45 @@
+body{
+    background-color: black;
+    z-index: -1;
+    color:white;
+}
+#contenedor{
+    position: relative;
+    margin: 0 auto;
+    padding: 5px;
+    width: 400px;
+    height: 600px;
+	
+}
+#controles{
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+}
+#comenzar {
+    float: left;
+    margin-left: 25px;
+    display: block;
+}
+#arbol{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#juego{
+    position: relative;
+    width: 400px;
+    height: 381px;
+    margin: 0 auto;
+    top: 10px;
+    background-color: white;	
+}
+.bolita{
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    top: 0px;
+	z-index:3;
+    left: 300px;
+}

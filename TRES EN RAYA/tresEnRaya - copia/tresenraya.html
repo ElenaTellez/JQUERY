@@ -1,0 +1,72 @@
+<!--
+Hacer un tres en raya
+Una matriz de 9 clases
+2 turnos (2 jugadores)
+
+Uso de funciones de clases(.addClass(),hasClass(),removeClass()) para el uso de X y O
+Detección de linea. Cada uno que lo haga como lo vea. Intentar no hacer muchos if y pensar hacerlo con array.
+empezar nueva partida borra todo y actualiza variables.
+Capa texto donde se muestra el turno del jugador y los avisos
+-->
+<!DOCTYPE HTML>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta author="María Elena Téllez Santana">
+    <title>Tres En Raya</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/funciones.js"></script>
+    <script>
+	
+	$(document).ready(function(){  
+		var turno = 1;
+		var jugador = " ";
+		
+		var combinacionGanadora = [[1,2,3],[1,4,7],[1,5,9],[2,5,8],[3,5,7],[3,6,9],[4,5,6],[7,8,9]];
+		
+		$("#botonComenzar").click(function(){ 
+			for (var i = 1; i < 10; i++) {
+				var recuadro = $("<div></div>").addClass("casilla").attr("id","capa"+i);
+				$("#tablero").append(recuadro);  
+				}  
+		});
+		
+		$('#tablero').on('click','.casilla', function(){
+			if (turno %2 == 0){
+				$(this).addClass("cruz");
+				turno++;
+				jugador = "cruz";
+				} else {
+					$(this).addClass("circulo");
+					turno++;
+					jugador = "circulo";
+				}
+				for (var i = 1; i < 7; i++) {
+					console.log("hola");
+					if (($("capa"+combinacionGanadora[i][0]).hasClass(jugador))
+					&& ($("capa"+combinacionGanadora[i][2]).hasClass(jugador))
+					&& ($("capa"+combinacionGanadora[i][3]).hasClass(jugador))){
+						
+						$("#tablero").remove(); 
+						}
+					}
+				
+					
+			});
+		
+		
+	});
+	</script>
+</head>
+    
+<body>
+    <div id="contenedor">
+        <div id="texto">Pulse Comenzar para empezar una partida</div>
+        <div id="tablero"></div>
+        <div id="controles">
+            <button id="botonComenzar">Comenzar</button>            
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!--
+2. JUEGO DE LA OCA
+(Crear dinámicamente) Una matriz de de 16 celdas 4 x 4
+-> Hacerlo genérico por si ampliamos la cantidad de celdas
+2.   Definir de forma aleatoria 3 ocas
+3.   Definir de forma aleatoria 3 trampa -> Volver al pcpio 
+-> Añadir con addclass, y comprobar con hasclass
+4.  Comenzar partida
+2 jugadores
+Jugador 1 -> Aparece dado y de forma aleatoria aparece un dado del 1 al 6
+Con animation moverlo hasta la celda correspondiente.
+Si cae en Oca moverlo hasta la próxima OCA
+Si cae en trampa volver al pcpio
+Gana quién llegue a la casilla 
+Versión 1 . Hacer el tablero lineal.
+-->
+<!DOCTYPE HTML>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta author="Jesús Caballero Corpas">
+    <title>Juego de la Oca Lineal</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/funciones.js"></script>
+</head>
+    
+<body>
+    <div id="contenedor">
+        <div id="texto">Pulse Comenzar para empezar una partida</div>
+        <div id="tablero">
+            <div id="rojo"></div>
+            <div id="verde"></div>
+        </div>
+        <div id="controles">
+            <button id="botonComenzar">Comenzar</button>
+            <button id="botonDado" disabled>Tirar Dado</button>
+            <div id="dado">Tirada: </div>
+        </div>
+    </div>
+</body>
+</html>
