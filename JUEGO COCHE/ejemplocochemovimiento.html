@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>stop demo</title>
+  <style>
+	  
+#contenedor {	
+	width:600px;
+	height:125 px;
+	background-color: blue;
+}	  
+  
+#cielo {
+	background-image:url(images.jpeg);
+	position:relative;	
+	width: 600px;
+	height:125px;
+	
+}
+
+
+.coches{
+	width:80px;
+	height:80px;
+	top:75px;
+	position:relative;	
+	background-repeat:no-repeat;
+	background-image:url(car1.png);
+
+} 
+ 
+  </style>
+  <script src="jquery-2.1.4.min.js"></script>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>	
+<script>
+$(document).ready(function(){
+	
+	animar();
+	
+	function animar() {
+		$("#cielo").css('background-position', '0px 0px');
+		
+		$("#cielo").animate({
+			backgroundPosition: '-1024px'}, 20000, 'linear', function() {
+				animar(); 
+				});
+			};
+	});
+	
+	
+	
+	$("body").keydown(function(e) { //funcion movimiento coche
+	
+		switch((e.keyCode ? e.keyCode : e.which)){
+        //case 13: // Enter
+        //case 27: // Esc
+			case 32: // Space
+		//Jump
+			$("#block").animate({top: "-=50"},100);
+			$("#block").animate({top: "+=50"},100);		
+			break;
+			case 37:   // Left Arrow
+            $("#block").animate({left: "-=10"},1);
+			break;
+			case 38: // Up Arrow
+		$("#block").animate({top: "-=10"},1);
+			break;
+			case 39:   // Right Arrow
+            $("#block").animate({left: "+=10"},1);
+			break;
+			case 40: // Down Arrow
+			$("#block").animate({top: "+=10"},1);
+			break;
+		}
+		
+});
+
+</script>
+
+
+</head>
+<body>
+<div id="contenedor">
+<div id="cielo">
+
+<div id="block" class="coches"></div>
+</div>
+</div>  
+ 
+</body>
+</html>
