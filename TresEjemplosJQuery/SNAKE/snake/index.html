@@ -1,0 +1,188 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+
+	<head>
+
+	<title>Demo -  Snake Game using jquery - Web developer juice</title>
+
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<meta name="title" content="" />
+	<meta name="author" content="" />
+	<meta name="subject" content="" />
+	<meta name="language" content="en" />
+	<meta name="keywords" content="" />
+	
+	<style>
+		*{padding:0;margin:0}
+		html{text-align:center;}
+		body{width:900px;margin:10px auto 0 auto;font-family:trebuchet ms;text-align:left;position:realtive;}
+		.container h3{margin:10px 0;}
+		.clear{clear:both;}
+		.none{display:none}
+		table{margin:0 auto 10px auto;border:1px solid #ccc;box-shadow:3px 3px 10px #999;}
+		td{width:6px;height:6px;border:1px solid #fff;cellpadding:0;cellspacing:0;}
+		td.snakeCell{background:#000;-moz-border-radius:5px;border:1px solid #000;box-shadow:1px 1px 1px #aaa;}
+		td.snakeHead{background:red;-moz-border-radius:5px;border:1px solid red;}	
+		td.fruitCell{background:green;-moz-border-radius:5px;border:1px solid green;box-shadow:1px 1px 1px #aaa;}
+
+		#scoreBoard{text-shadow:2px 2px 1px #fff;box-shadow:0 -3px 5px #aaa;width:382px;margin:5px auto 0 auto;border:1px solid #ccc;background:#eee;font-weight:bold;padding:10px;}
+		.gameOver{font-weight:bold;text-shadow:2px 2px 1px #fff;position:absolute;top:0;left:550px;background:#eee;color:red;width:70px;border:50px solid #eee;text-align:center;-moz-border-radius:90px;-webkit-border-radius:90px;border-radius:90px;box-shadow:3px 3px 10px #999;}
+</style>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script type="text/javascript">
+		var direction = 'right', speed = 100, ticker = null, fruitCell = [], score = 0, size = 40;
+		var snakeCells = [
+			[ 10, 14 ],
+			[ 10, 13 ],
+			[ 10, 12 ],
+			[ 10, 11 ],
+			[ 10, 10 ],
+			[ 10, 9 ],
+			[ 10, 8 ],
+			[ 10, 7 ]
+		];
+		var snakeHead = [ 10, 14 ];
+		
+		function renderSnake (){
+			$('td').removeClass('snakeCell snakeHead');
+			for (var cell in snakeCells ){
+				$('tr').eq( snakeCells[cell][0] ).find('td').eq(snakeCells[cell][1]).addClass('snakeCell');
+			}
+			$('tr').eq( snakeHead[0] ).find('td').eq(snakeHead[1]).addClass('snakeHead');
+		}
+
+		function getFruitCell() {
+			fruitCell = [ getRandomNumber( $( 'tr' ).length ), getRandomNumber( $( 'tr:eq(0)>td' ).length ) ];
+		}
+
+		function gameOver() {
+			$('div.gameOver').show('fast', function() {
+				$( this ).animate({top:250}, 'slow');
+			});
+			clearInterval( ticker );
+		}
+
+		function updateSnakeCell(){
+			var snakeNewHead = [];
+			switch(direction){
+				case 'right':
+					snakeNewHead = [ snakeHead[0], snakeHead[1]+1 ];
+					break;
+				case 'left':
+					snakeNewHead = [ snakeHead[0], snakeHead[1]-1 ];
+					break;
+				case 'up':
+					snakeNewHead = [ snakeHead[0]-1, snakeHead[1] ];
+					break;
+				case 'down':
+					snakeNewHead = [ snakeHead[0]+1, snakeHead[1] ];
+					break;
+			}
+			var newCell = {length:0}
+			if( snakeNewHead[0] < 0 || snakeNewHead[1] < 0 ) {
+				gameOver();
+				return;
+			} else if( snakeNewHead[0] >= size || snakeNewHead[1] >= size ) {
+				gameOver();
+				return;
+			}
+			var newCell = $('tr').eq( snakeNewHead[0] ).find('td').eq(snakeNewHead[1]);
+			if( newCell.length == 0 ) {
+				gameOver();
+			} else {
+				if ( newCell.hasClass('snakeCell') ) {
+					gameOver();
+				} else {
+					if( newCell.hasClass( 'fruitCell' ) ) {
+						snakeCells.push( [] );
+						getFruitCell();
+						renderFruitCell();
+						score += 100;
+						$( '#scoreBoard' ).html( 'Your Score : ' + score );
+						speed = speed - 10 > 5 ? speed - 10 : speed;
+						clearInterval( ticker );
+						startGame();
+					}
+					for( var i = ( snakeCells.length - 1 ); i > 0 ; i-- ) {
+						snakeCells[ i ] = snakeCells[ i - 1 ];
+					}
+					snakeCells[ 0 ] = snakeHead = snakeNewHead;
+					renderSnake();
+				}
+			}
+		}
+
+		function getRandomNumber( limit ) {
+			return parseInt( Math.random() * limit % limit );
+		}
+
+		function getNewDirection( keyCode ) {
+			var codes = {
+				37 : 'left',
+				38 : 'up',
+				39 : 'right',
+				40 : 'down'
+			};
+
+			if( typeof codes[ keyCode ] != 'undefined' ) {
+				var newDirection = codes[ keyCode ], changeDirection = true;
+				switch( direction ) {
+					case 'up' :
+						changeDirection = newDirection != 'down';
+						break;
+					case 'down' :
+						changeDirection = newDirection != 'up';
+						break;
+					case 'right' :
+						changeDirection = newDirection != 'left';
+						break;
+					case 'left' :
+						changeDirection = newDirection != 'right';
+						break;
+				}
+				direction = changeDirection ? newDirection : direction;
+			}
+		}
+
+		function renderBoard() {
+			var rowhtml = '';
+			for( var i = 0; i < size; i++ ) {
+				rowhtml +='<td cellpadding="0" cellspacing="0"></td>'
+			}
+			html = [];
+			for( var i = 0; i < size; i++ ) {
+				html.push( '<tr cellpadding="0" cellspacing="0">' + rowhtml + '</tr>' );
+			}
+			$( document.body ).append( '<table>' + html.join( '\n' ) + '</table>' );
+			getFruitCell();
+		}
+
+		function renderFruitCell() {
+			$( 'td' ).removeClass( 'fruitCell' );
+			$('tr').eq( fruitCell[0] ).find('td').eq(fruitCell[1]).addClass( 'fruitCell' );
+		}
+
+		function startGame() {
+			ticker = setInterval( updateSnakeCell, speed );
+		}
+
+		$( document ).ready(function(){
+			renderBoard();
+			renderFruitCell();
+			$( document ).bind('keydown', function( e ) {
+				getNewDirection( e.keyCode );
+			});
+			startGame();
+		});
+	</script>
+	
+</head>
+<body>
+<h1>Demo -  Snake game using jquery </h1>
+		</div>
+
+		<div id="scoreBoard">Your Score : 0</div>
+		<div class="gameOver" style="display:none">Oops! Game Over</div>
+		
+		</body>

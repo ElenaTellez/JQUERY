@@ -1,0 +1,58 @@
+body{
+    background-color: deepskyblue;
+    z-index: -1;
+    color:white;
+}
+#contenedor{
+    position: relative;
+    margin: 0 auto;
+    padding: 5px;
+    width: 800px;
+    height: 400px;
+}
+#controles{
+    position: relative;
+    text-align: center;
+    top: 20px;
+}
+#tablero{
+    position: relative;
+    width: 832px;
+    height: 52px;
+    margin: 0 auto;
+    top: 10px;
+    background-color: white;
+}
+#texto{
+    position: relative;
+    text-align: center;
+}
+.casilla{
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    color: black;
+    float: left;
+}
+#rojo, #verde{
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: red;
+    top: 5px;
+    left: -45px;
+}
+#verde{
+    top: 15px;
+    background-color: green;
+}
+.oca{
+    background-image: url(../images/oca.png);
+}
+.pozo{
+    background-image: url(../images/pozo.gif);
+}
+.fin{
+    background-image: url(../images/finOca.png);
+}

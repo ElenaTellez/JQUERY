@@ -1,0 +1,112 @@
+<!--
+Hacer un tres en raya
+Una matriz de 9 clases
+2 turnos (2 jugadores)
+
+Uso de funciones de clases(.addClass(),hasClass(),removeClass()) para el uso de X y O
+Detección de linea. Cada uno que lo haga como lo vea. Intentar no hacer muchos if y pensar hacerlo con array.
+empezar nueva partida borra todo y actualiza variables.
+Capa texto donde se muestra el turno del jugador y los avisos
+-->
+<!DOCTYPE HTML>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta author="María Elena Téllez Santana">
+    <title>Tres En Raya</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/funciones.js"></script>
+    <script>
+	
+	$(document).ready(function(){  
+		
+		var jugador = "circulo";
+		var tirada = 0;
+		
+		var combinacionGanadora = [['#caja1','#caja2','#caja3'],
+                        ['#caja1','#caja4','#caja7'],
+                        ['#caja1','#caja5','#caja9'],
+                        ['#caja2','#caja5','#caja8'],
+                        ['#caja3','#caja5','#caja7'],
+                        ['#caja3','#caja6','#caja9'],
+                        ['#caja4','#caja5','#caja6'],
+                        ['#caja7','#caja8','#caja9']];
+		
+		$("#botonComenzar").click(function(){ 
+		//Elimina todas las cajas e inicializa los id
+			for(var i = 1; i < 10; i++){
+				$('#caja' + i).remove();
+				tirada = 0;
+			}
+			for (var i = 1; i < 10; i++) {
+				var recuadro = $("<div></div>").addClass("casilla").attr("id","caja"+i);
+				$("#tablero").append(recuadro);  
+				}  
+			$(this).attr('disabled','true');
+			$('#texto').text("Turno del Jugador 1");	
+		});
+		
+		$('#tablero').on('click','.casilla', function(){ // esta funcion distingue los jugadores y añade cruz o circulo
+			if (jugador=="cruz"){ //como jugador es circulo empezamos con circulo y al entrar en el if le doy la clase cruz
+            jugador = 'circulo'; // le doy la clase circulo
+            $('#texto').text("Turno del Jugador 1");
+			tirada++;
+        } else {-
+            jugador = 'cruz';  // le doy la clase cruz y asi cada vez que entro en el if le doy una nueva clase a jugador. 
+            $('#texto').text("Turno del Jugador 2");
+			tirada++;
+        }
+        //Se añade la nueva clase 
+        $(this).addClass(jugador);
+		comprobarGanador($(this).attr("id")); // compruebo si hay una combinacion ganadora
+		});
+		
+    function comprobarGanador(idclick){  //Funcion que comprueba si alguno ha ganado
+        //Se comprueba el numero de jugador
+        var numero = (jugador == 'cruz') ? 1 : 2; // jugador puede ser uno o dos
+			
+        //Se comprueban las distintas combinaciones.
+        for(var i = 0; i < combinacionGanadora.length; i++){
+            //Si alguien gana, se muestra 
+            if($(combinacionGanadora[i][0]).hasClass(jugador) && 
+               $(combinacionGanadora[i][1]).hasClass(jugador) &&
+               $(combinacionGanadora[i][2]).hasClass(jugador)){
+			   tirada == 0;
+                $('#texto').text("Gana Jugador " + numero);
+                $('.casilla').slideUp(3000,function(){
+                    $('#texto').text("Pulse Comenzar para jugar otra partida");
+                });
+                $('#botonComenzar').removeAttr('disabled');
+            }
+			
+			// si no gana nadie entonces empate y opcion de otra partida
+			
+			if ((tirada == 9) && !($(combinacionGanadora[i][0]).hasClass(jugador) && 
+               $(combinacionGanadora[i][1]).hasClass(jugador) &&
+               $(combinacionGanadora[i][2]).hasClass(jugador))){
+				$('#texto').text("¡EMPATE!");
+                $('.casilla').slideUp(3000,function(){
+                    $('#texto').text("Pulse Comenzar para jugar otra partida");
+                });
+                $('#botonComenzar').removeAttr('disabled');
+		
+			}
+        }
+    }
+ 
+		
+	});
+	</script>
+</head>
+    
+<body>
+    <div id="contenedor">
+        <div id="texto">Pulse Comenzar para empezar una partida</div>
+        <div id="tablero"></div>
+        <div id="controles">
+            <button id="botonComenzar">Comenzar</button>            
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!--
+Mini Hundir la flota
+Se definen 5 coordenadas aleatorias del 1 al 25
+Al hacer click sobre las capas centrales comprobará si está en el array creado aleatorio con la posición de los 5 barcos.
+Agua o Barco → Aparecerá con un efecto.
+Número aciertos:0 (se va incrementando)
+Número fallos: 0 (se va incrementando)
+(si el numero de aguas = 2O) GAME OVER
+(si el número de tocados= 5) WIN EN x movimientos (x = aciertos + fallos)
+Botones:
+Comenzar de nuevo (vuelve a generar los 5 y limpiar todo se quita con fadeOut/fadeIN
+tambien quita GAME OVER)
+Ver Barcos (muestra los 5 barcos generados, durante 1/2 segundo )
+-->
+<!DOCTYPE HTML>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta author="Jesús Caballero Corpas">
+    <title>Hundir la flota</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/funciones.js"></script>
+</head>
+    
+<body>
+    <div id="titulo">HUNDIR LA FLOTA</div>
+    <div id="contenedor">
+       <div id="controles">
+            <button id="botonComenzar">Comenzar de nuevo</button>
+            <button id="botonBarcos">Ver Barcos</button>
+            <div id="aciertos">Aciertos: 0</div>
+            <div id="fallos">Fallos: 0</div>
+        </div>
+        <div id="tablero"><p></p></div>
+    </div>
+</body>
+</html>

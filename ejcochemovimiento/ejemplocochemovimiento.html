@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>stop demo</title>
+  <style>
+	#contenedor {	
+	width:600px;
+	height:125 px;
+	background-color: blue;
+	}	  
+  
+	#cielo {
+	background-image:url(images.jpeg);
+	position:relative;	
+	width: 600px;
+	height:125px;
+	
+	}
+   .coches{
+	width:80px;
+	height:80px;
+	top: 50px;
+	position:absolute;	
+	background-repeat:no-repeat;
+	background-image:url(car2.png);
+	} 
+	.objeto1{
+	position:absolute;	
+	width:60px;
+	height:60px; 
+	background-repeat:no-repeat;
+	background-image:url(rodadora.png);
+	 
+	} 
+	.objeto2{
+	width:80px;
+	height:80px; 
+	position:relative;	
+	background-repeat:no-repeat;
+	background-image:url(car1.png);
+	} 
+  
+  </style>
+ <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>
+
+$(document).ready(function(){
+	var play;	
+	animar();
+	play = setInterval(scramble, 2000);
+	
+	function animar() {
+		$("#cielo").css('background-position', '0px 0px');
+		$("#cielo").animate({
+			backgroundPosition: '-1024px'}, 20000, 'linear', function() {
+				animar(); 
+				});
+			};
+	 
+	
+	$("body").keydown(function(e) { // con la funcion Keydown lo que indico es se desarrolla el evento cuando pulso una tecla. 
+		switch((e.keyCode ? e.keyCode : e.which)){  // A través de la propiedad which del objeto evento de jQuery podemos saber qué tecla ha sido pulsada cuando se produce el evento de teclado 
+			//case 13: // Enter
+			//case 27: // Esc
+			case 32: // Space // la barra espaciadora es la tecla numero 32
+			//Jump
+				$("#block").animate({top: "-=50"},100);
+				$("#block").animate({top: "+=50"},100);		
+			break;
+			case 37:   // Left Arrow
+				$("#block").animate({left: "-=10"},1);
+			break;
+			case 38: // Up Arrow
+				$("#block").animate({top: "-=10"},1);
+			break;
+			case 39:   // Right Arrow
+				$("#block").animate({left: "+=10"},1);
+			break;
+			case 40: // Down Arrow
+				$("#block").animate({top: "+=10"},1);
+		break;
+		}
+	});
+	
+	function scramble() { //añade los div de semaforo o bola rodadora de forma aleatoria
+        var num = getRand(1, 2); // dame un numero de forma aleatoria entre 1 y el numero de hijos de container
+		var posLeft = getRand (300,600) 
+		var obstaculo = $('<div></div>').addClass('objeto'+num).attr('id',"salgo"); // le añado una segunda clase segun le corresponda semaforo o bola
+        $("#cielo").append(obstaculo);
+		$(obstaculo).css("top", "75px");  
+		$(obstaculo).css("left", posLeft); //left aleatorio dentro de carretera 
+		$(obstaculo).animate({
+			left:'-50px'},5000,function (){
+						$(this).remove();
+				}
+			);	
+				
+    }
+	
+	function getRand(min, max) { //esta funcion ayuda a crear la aleatoriedad
+				return Math.floor(Math.random() * (max - min) + min);
+			}
+});
+
+</script>
+</head>
+<body>
+<div id="contenedor">
+	<div id="cielo">
+		<div id="block" class="coches"></div>
+	</div>
+</div>  
+ 
+</body>
+</html>
+</html>

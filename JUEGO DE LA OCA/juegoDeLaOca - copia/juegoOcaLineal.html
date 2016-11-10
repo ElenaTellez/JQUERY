@@ -1,0 +1,181 @@
+<!--
+2. JUEGO DE LA OCA
+(Crear dinámicamente) Una matriz de de 16 celdas 4 x 4
+-> Hacerlo genérico por si ampliamos la cantidad de celdas
+2.   Definir de forma aleatoria 3 ocas
+3.   Definir de forma aleatoria 3 trampa -> Volver al pcpio 
+-> Añadir con addclass, y comprobar con hasclass
+4.  Comenzar partida
+2 jugadores
+Jugador 1 -> Aparece dado y de forma aleatoria aparece un dado del 1 al 6
+Con animation moverlo hasta la celda correspondiente.
+Si cae en Oca moverlo hasta la próxima OCA
+Si cae en trampa volver al pcpio
+Gana quién llegue a la casilla 
+Versión 1 . Hacer el tablero lineal.
+-->
+<!DOCTYPE HTML>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta author="María Elena Téllez Santana">
+    <title>Juego de la Oca Lineal</title>
+	<link rel="stylesheet" type="text/css" href="css/estilo.css">
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script src="js/funciones.js"></script>
+	<script>
+	
+	var numCasillas = 16;
+	$(document).ready(function(){  	
+	var tablero = [];
+	var jugador = 'rojo';
+	
+		function getRand(min, max) { //esta funcion ayuda a crear la aleatoriedad
+				return Math.random() * (max - min) + min;
+			}
+	
+		$("#botonComenzar").click(function(){ 
+			
+			for(var i = 1; i <= numCasillas; i++){ 
+			//Elimina todas las cajas e inicializa los id
+			$('#casilla' + i).remove();
+			}
+			for(var i = 0; i < numCasillas - 1;i++){
+			tablero[i] = "vacia"; 
+			}  
+			tablero[numCasillas - 1] = "fin";
+			
+			var numOcas = 3;
+			var numPozos = 3;			
+			
+			do{
+            var posicion = Math.floor(Math.random() * (numCasillas - 1));//math.floor evita que el numero tenga decimales
+            if(tablero[posicion] == "vacia" && numOcas > 0) { 
+                tablero[posicion] = "oca"; 
+                numOcas--; 
+            }
+            if(tablero[posicion] == "vacia" && numPozos > 0) { 
+                tablero[posicion] = "pozo"; 
+                numPozos--; 
+            }
+        } while((numOcas + numPozos) > 0);
+        
+        //Se crean las 16 casillas
+        for(var i = 1; i <= numCasillas; i++){
+            var casilla = $('<div></div>')
+                            .addClass('casilla') //añado clase casilla a cada recuadro del recorrido
+                            .addClass(tablero[i - 1]) // le añado una segunda clase segun le corresponda oca o pozo
+                            .attr('id','casilla' + i) //añado id a la casilla
+                            .text(i); //añado numero a la casilla   
+            $("#tablero").append(casilla);
+        }
+        
+        // se indica el turno del jugador.
+        $(this).attr('disabled','true');
+        $('#texto').text("Turno del Jugador " + jugador); //empieza jugador rojo que es el valor que le hemos dado a variable jugador
+		$('#botonDado').removeAttr('disabled'); //Se desactiva el botón comenzar 
+		
+		$('#rojo').attr('pos',0); 
+        $('#verde').attr('pos',0);
+        $('#rojo').animate({ // damos valor a la posicion de regreso cuando se caen en un pozo
+			left:'-45px'},500
+			);
+        $('#verde').animate({
+			left:'-45px'},500
+			);
+        $('#dado').text('Tirada: '); //indica inicio de dado sin valor
+    });
+		
+	 
+    $('#botonDado').on('click',function(){ //Función para tirar dado////////////////////////////////////////////////////
+        
+		$(this).attr('disabled','true'); //desactivamos dado
+		
+        //Se lanza el dado
+        var dado = Math.floor(Math.random() * 6) + 1;
+        $('#dado').text('Tirada: ' + dado);
+        
+        //Aumento la posición de la ficha
+        var posicion = +$('#'+ jugador).attr('pos');
+        $('#'+ jugador).attr('pos',(posicion + dado));
+        
+        //Se avanza la ficha hasta la casilla que haya salido
+        var avanza = 52 * dado;
+        //Se comprueba que no se pase de la ultima casilla
+        if((posicion + dado) > numCasillas) { 
+            avanza = 52 * (numCasillas - posicion);
+            $('#'+ jugador).attr('pos', numCasillas);
+        }
+        
+        //Se inicia el movimiento de la ficha
+			$('#'+ jugador).animate(
+			{left:'+=' + avanza + 'px'},2000,
+			function(){
+            posicion = +$('#'+ jugador).attr('pos');
+            
+				//Se realizan las acciones de caer en una oca
+				if(tablero[posicion - 1] == 'oca'){
+					$('#texto').text("De oca a oca y tiro por que me toca. Sigue jugando el jugador " + jugador);
+					do{
+					posicion++; 
+					} while (tablero[posicion - 1] != 'oca' && tablero[posicion - 1] != 'fin');
+					
+					$('#'+ jugador).animate({ 
+					left:((52 * posicion) - 45)},2000,
+					function(){
+					$('#'+ jugador).attr('pos', posicion);
+                    //Se activa el boton de nuevo
+                    $('#botonDado').removeAttr('disabled');
+                });
+                
+            //Se ralizan las acciones de caer en el pozo
+            } else if(tablero[posicion - 1] == 'pozo'){
+                $('#texto').text("Has caido en el pozo. Vuelves al principio");
+                $('#'+ jugador).animate({
+				left:'-45px'},2000,function(){ 
+                    $('#'+ jugador).attr('pos', 0);
+                    cambioTurno(); 
+                });
+                
+            //Se realizan las acciones de caer en una casilla vacia
+            } else if(tablero[posicion - 1] == 'vacia'){
+                cambioTurno();
+            }
+            
+            //Se realizan las funciones de fin de partida
+            if(tablero[posicion - 1] == 'fin') {
+                $('#texto').text("El jugador " + jugador + " ha ganado la partida. Pulse en comenzar para jugar de nuevo.");
+                $('#botonComenzar').removeAttr('disabled');
+                $('.casilla').slideUp(3000);
+                $('#botonDado').attr('disabled','true');
+            }
+        });
+    });
+    
+    //Funcion para cambiar de turno
+    function cambioTurno(){
+        if (jugador == "rojo"){ jugador = 'verde'; } 
+        else { jugador = 'rojo'; }
+        $('#texto').text("Turno del Jugador " + jugador);
+        //Se activa el boton de nuevo
+        $('#botonDado').removeAttr('disabled');
+    }
+});	
+	</script>
+</head>
+    
+<body>
+    <div id="contenedor">
+        <div id="texto">Pulse Comenzar para empezar una partida</div>
+        <div id="tablero">
+            <div id="rojo"></div>
+            <div id="verde"></div>
+        </div>
+        <div id="controles">
+            <button id="botonComenzar">Comenzar</button>
+            <button id="botonDado" disabled>Tirar Dado</button>
+            <div id="dado">Tirada: </div>
+        </div>
+    </div>
+</body>
+</html>

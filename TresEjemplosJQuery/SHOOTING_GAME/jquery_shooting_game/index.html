@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>JQuery Shooting Game</title>
+    <script type="text/javascript" src="js/jquery-1.5.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.9.custom.min.js"></script>
+    <script type="text/javascript">
+    var miss = 0;
+    var hit = 0;
+        
+    $(document).ready(function() {
+
+        var play;
+
+        $("#btnstart").click(function(){
+            startplay();
+        });
+
+        function startplay() {
+            $("#message").fadeOut('slow');
+            $(".character").fadeOut('slow');
+            $("#miss").html("0 Miss");
+            $("#hit").html("0 Hit");
+            miss = 0;
+            hit = 0;
+            $("#btnstart").css("color", "#e3e3e3");
+            $("#btnstart").unbind("click"); // deshabilita play, no permite que vuelva a generar los eventos que controla
+			//$("#btnstart").attr('disabled','true'); esto deshabilita el boton pero no para los eventos //$("#btnstart").removeAttr('disabled'); 
+            
+			play = setInterval(scramble, 1800);  // llamo a la funcion scramble que va a poner las imagenes de forma aleatoria
+            
+			setTimeout(function() { // callback, cuando termine con los 30 segundos se introduce el mensaje final. 
+                clearInterval(play); // termino con la funcion scramble que he llamado con play
+				
+                $("#btnstart").css("color", "#333333");
+                $("#btnstart").bind("click", startplay); // devuelve al boton play la capacidad de iniciar los eventos
+				 
+                // show the final message
+                var containerPos = $('#container').offset();
+                $("#message").animate({
+                    top: containerPos.top,
+                    left: containerPos.left
+                    }, 'fast', function() {
+                        setTimeout(function() {
+                            $("#message").fadeIn('slow'); //aparece el div final que invita a volver a jugar
+                            $(".character").fadeIn('slow'); // aparecen todas las imagenes tanto del policia como de los malos no matados
+                        }, 500); 
+                });
+            }, 30000); // esta funcion que engloba todas las demas dura 30 segundos
+        }
+
+        $(".character").click(function() { // si hago click en la imagen del policia
+            if ($(this).hasClass("ally")) {
+                $(this).effect("bounce", { //hace efecto balanceo comenzando hacia la izquierda durante 2 segundos
+                    times: 2,
+                    direction: 'left'
+                }, 300);
+                $(this).slideUp("fast"); // la imagen se recoge con un slideUp
+                miss++; // sumo uno al marcador de disparos al policia
+                $("#miss").html(miss + " Miss");
+            } else {
+                $(this).hide("explode", 500); // la imagen hace efecto de explosion
+				// con .show("explode", 500) se hace el efecto contrario de la explosion
+				// tambien vale effect("explode", 500)
+                hit++; // sumo uno al marcador de malos
+                $("#hit").html(hit + " Hit");
+            }
+        });
+    });
+
+    function randomFromTo(from, to){ // funcion para elegir los hijos de un div de forma aleatoria
+        return Math.floor(Math.random() * (to - from + 1) + from);
+    }
+
+    function scramble() { //añade los div de los malos y del policia de forma aleatoria char1 es enemy1 etc...
+        var children = $('#container').children();
+
+        var randomId = randomFromTo(1, children.length); // dame un numero de forma aleatoria entre 1 y el numero de hijos de container
+        moveRandom('char'+randomId); // esta funcion definida abajo le da la posicion de forma aleatoria
+        setTimeout(function(){
+            $("#char"+randomId).slideDown('fast');            
+        }, 500);
+        
+        setTimeout(function() {
+            $("#char"+randomId).slideUp('fast');
+        }, 1500);
+    }
+
+    function moveRandom(id) {
+        /* get container position and size
+         * -- access method : cPos.top and cPos.left */
+        var cPos = $('#container').offset();
+        var cHeight = $('#container').height();
+        var cWidth = $('#container').width();
+
+        // get box padding (assume all padding have same value)
+        var pad = parseInt($('#container').css('padding-top').replace('px', ''));
+
+        // get movable box size
+        var bHeight = $('#'+id).height();
+        var bWidth = $('#'+id).width();
+
+        // set maximum position
+        maxY = cPos.top + cHeight - bHeight - pad;
+        maxX = cPos.left + cWidth - bWidth - pad;
+
+        // set minimum position
+        minY = cPos.top + pad;
+        minX = cPos.left + pad;
+
+        // set new position
+        newY = randomFromTo(minY, maxY);
+        newX = randomFromTo(minX, maxX);
+
+        $('#'+id).animate({
+            top: newY,
+            left: newX
+            }, 'slow', function() {
+        });
+    }
+    </script>
+    <style type="text/css">
+    body {
+        cursor: url('img/target.gif');
+        background: #ffffff url("img/trentanove.gif") repeat top right;
+    }
+    #stat {
+        background: #ffffff url("img/trentaquattro.gif") repeat top right;
+        margin: 0 auto;
+        border: 5px solid #999999;
+        width: 600px;
+        padding: 20px 50px;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        -webkit-border-radius: .5em;
+        -moz-border-radius: .5em;
+        border-radius: .5em;
+        text-align: center;
+    }
+    #stat span, #stat a {
+        text-decoration: none;
+        font-size: 28px;
+        background: #d3d3d3;
+        padding: 2px 10px;
+        color: #333333;
+        -webkit-border-radius: .2em;
+        -moz-border-radius: .2em;
+        border-radius: .2em;
+        opacity: 0.8;
+        filter:alpha(opacity=80);
+    }
+    #stat a:hover {
+        background: #999999;
+    }
+
+    #note {
+        margin: 0 auto;
+        color: #ffffff;
+        margin-bottom: 20px;
+        width: 600px;
+        text-align: center;
+        font-size: 11px;
+        font-family: Arial, "Free Sans";
+    }
+
+    #container {
+        background: #ffffff url("img/trentaquattro.gif") repeat top right;
+        margin: 0 auto;
+        border: 5px solid #999999;
+        width: 600px;
+        height: 350px;
+        padding: 20px 50px;
+        cursor: url("img/target.gif"), pointer;
+        -webkit-border-radius: .5em;
+        -moz-border-radius: .5em;
+        border-radius: .5em;
+    }
+
+     #message {
+        background: #999999;
+        margin: 0 auto;
+        border: 5px solid #999999;
+        width: 600px;
+        height: 350px;
+        padding: 20px 50px;
+        -webkit-border-radius: .5em;
+        -moz-border-radius: .5em;
+        border-radius: .5em;
+        position: absolute;
+        opacity: 0.8;
+        filter:alpha(opacity=80);
+        text-align: center;
+        font-size: 28px;
+        color: #000000;
+        display: none;
+    }
+
+    .character {
+        border: 2px solid #f3f3f3;
+        width: 95px;
+        height: 95px;
+        position: absolute;
+        display: none;
+        -webkit-border-radius: .5em;
+        -moz-border-radius: .5em;
+        border-radius: .5em;
+        cursor: url('img/target.gif'), pointer;
+    }
+    .character:hover {
+        opacity: 0.6;
+        filter:alpha(opacity=60);
+    }
+    .enemy1 {
+        background: url("img/enemy1.jpg");
+    }
+    .enemy2 {
+        background: url("img/enemy2.jpg");
+    }
+    .enemy3 {
+        background: url("img/enemy3.jpg");
+    }
+
+    .ally {
+        background: url("img/ally.jpg");
+    }
+    </style>
+</head>
+<body>
+    <div id="stat">
+        <span id="hit">0 Hit</span>
+        &nbsp;
+        <span id="miss">0 Miss</span>
+        &nbsp;
+        <a id="btnstart" href="javascript://">Play &darr;</a>
+    </div>
+
+    <div id="note">
+        Press play to start the game, the game will play for 30 seconds,
+        do not shoot the policeman
+    </div>
+
+    <div id="container">
+        <div id="char1" class="character enemy1"></div>
+        <div id="char2" class="character enemy2"></div>
+        <div id="char3" class="character enemy3"></div>
+        <div id="char4" class="character ally"></div>
+    </div>
+
+    <div id="message">
+        Thank you for playing, press "Play" to start again.
+    </div>
+</body>
+</html>
