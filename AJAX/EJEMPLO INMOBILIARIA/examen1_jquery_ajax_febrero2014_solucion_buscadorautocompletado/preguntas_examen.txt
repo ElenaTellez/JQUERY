@@ -1,0 +1,12 @@
+1. Botón de Filtrar por tipo de inmueble
+Al pulsar sobre el botón Filtrar debe aparecer nuevamente el listado de inmueble pero solo 
+con el tipo seleccionado. Además tardará un segundo en realizar la acción y aparecerá una barra de espera. Se debe hacer con $.ajax
+
+2. Al pulsar sobre el número de visita se incrementa y aparece el listado actualizado
+Si ya existe un filtro se mantiene
+
+3. Botón de modificar, que aparecerá en una ventana de diálogo los datos a modificar.
+
+4. Botón de eliminar, preguntará si desea eliminar o no. En caso de que elimine, se borrará la fila con un efecto fadeout.
+
+5. Botón de nuevo. Aparecerá una nueva fila formulario al final de la tabla de valores. Al añadir, se añadirá a la tabla. Si hay un filtro se mantendrá.
